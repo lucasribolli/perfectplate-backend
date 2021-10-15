@@ -1,14 +1,12 @@
 // /**
-//  * npm install pg
-//  * 
 //  * running at http://localhost:4000
 //  */
 
 const express = require('express')
 var bodyParser = require('body-parser')
+const cors = require('cors')
 const db = require('./db/index')
 const errors = require('./utils/messages_errors')
-const cors = require('cors')
 
 var app = express()
 app.use(cors())
@@ -17,7 +15,7 @@ PORT = process.env.PORT || 4000
 
 app.set('port', PORT)
 app.listen(PORT, function () {
-  console.log('Server is running.. on Port 4000')
+  console.log('Server is running...')
 })
 
 app.get('/users/query_all', function (req, res, next) {
@@ -25,7 +23,6 @@ app.get('/users/query_all', function (req, res, next) {
   .then((result) => res.send(result.rows))
   .catch((err) => res.status(500).send(err))
 })
-
 
 /*
 {
@@ -40,20 +37,22 @@ app.post('/users/signup', function (req, res, next) {
   password = req.body['password']
 
   db.query(
-    "INSERT INTO USERS (username, password, email) VALUES($1, $2, $3)", 
+    "INSERT INTO USERS (username, password, email) VALUES($1, $2, $3) RETURNING user_id", 
     [username, password, email]
-  ).then((_) => res.send({
-    'status': 'USER_INSERTED',
-    'date': Date.now().toString()
-  }))
+  ).then((result) => {
+    var successResponse = new Object()
+    successResponse.message = "USER_INSERTED"
+    successResponse.date = Date.now().toString()
+    successResponse.user_id = result.rows[0].user_id
+    res.status(200).send(successResponse) 
+  })
   .catch((err) => {
     var responseError = new Object()
-    responseError.status = "401"
-    responseError.message = errors[err.code]
-    res.send(responseError) 
+    responseError.message = errors[err.code].message
+    responseError.date = Date.now().toString()
+    res.status(errors[err.code].statusCode).send(responseError) 
   })
 })
-  
 
 /*
 {
@@ -69,17 +68,23 @@ app.post('/users/login', function (req, res, next) {
     "SELECT * FROM users WHERE email = $1 AND password = $2",
     [email, password]
   ).then((result) => {
+    var response = Object()
+    var statusCode
     if(result.rowCount == 0) {
-      var responseError = Object()
-      responseError.status = "401"
-      responseError.message = "USER_UNFOUND"
-      res.send(responseError)
+      statusCode = 401
+      response.message = "USER_UNFOUND"
     } else {
-      res.send({
-        'status': 'AUTHORIZED',
-        'date': Date.now().toString()
-      })
+      statusCode = 200
+      response.user_id = result.rows[0].user_id
+      response.message = "AUTHORIZED"
     }
+    response.date = Date.now().toString()
+    res.status(statusCode).send(response)
   })
-  .catch((err) => res.status(500).send(err))
+  .catch((err) => {
+    var responseError = new Object()
+    responseError.message = errors[err.code]
+    responseError.date = Date.now().toString()
+    res.status(500).send(responseError) 
+  })
 })

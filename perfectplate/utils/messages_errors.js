@@ -1,3 +1,6 @@
 module.exports = {
-    '23505': 'EMAIL_ALREADY_EXISTS',
+    '23505': {
+        'message': 'EMAIL_ALREADY_EXISTS',
+        'statusCode': 401
+    }
 }
