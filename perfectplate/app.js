@@ -1,12 +1,9 @@
-// /**
-//  * running at http://localhost:4000
-//  */
-
 const express = require('express')
 var bodyParser = require('body-parser')
 const cors = require('cors')
 const db = require('./db/index')
 const errors = require('./utils/messages_errors')
+const responses = require('./utils/responses')
 
 var app = express()
 app.use(cors())
@@ -20,46 +17,27 @@ app.listen(PORT, function () {
 
 app.get('/users/query_all', function (req, res, next) {
   db.query('SELECT * FROM USERS')
-  .then((result) => res.send(result.rows))
-  .catch((err) => res.status(500).send(err))
+  .then((result) => res.send(responses.success(result.rows)))
+  .catch((err) => res.send(responses.fail('fail')))
 })
 
-/*
-{
-  'username': ''
-  'email': '' 
-  'password': ''
-}
-*/
 app.post('/users/signup', function (req, res, next) {
-  username = req.body['username']
-  email = req.body['email']
-  password = req.body['password']
+  var username = req.body['username']
+  var email = req.body['email']
+  var password = req.body['password']
 
   db.query(
     "INSERT INTO USERS (username, password, email) VALUES($1, $2, $3) RETURNING user_id", 
     [username, password, email]
-  ).then((result) => {
-    var successResponse = new Object()
-    successResponse.message = "USER_INSERTED"
-    successResponse.user_id = result.rows[0].user_id
-    successResponse.ok = true
-    res.status(200).send(successResponse) 
+  )
+  .then((result) => {
+    res.send(responses.success(result.rows[0].user_id)) 
   })
   .catch((err) => {
-    var responseError = new Object()
-    responseError.message = errors[err.code].message
-    responseError.ok = false
-    res.status(errors[err.code].statusCode).send(responseError) 
+    res.send(responses.fail(errors[err.code]))
   })
 })
 
-/*
-{
-  'email': '' 
-  'password': ''
-}
-*/
 app.post('/users/login', function (req, res, next) {
   email = req.body['email']
   password = req.body['password']
@@ -68,56 +46,40 @@ app.post('/users/login', function (req, res, next) {
     "SELECT * FROM users WHERE email = $1 AND password = $2",
     [email, password]
   ).then((result) => {
-    var response = Object()
-    var statusCode
+    var successOrFail
     if(result.rowCount == 0) {
-      statusCode = 401
-      response.message = "USER_UNFOUND"
+      successOrFail = responses.fail("USER_UNFOUND")
     } else {
-      statusCode = 200
-      response.user_id = result.rows[0].user_id
-      response.message = "AUTHORIZED"
+      successOrFail = responses.success(result.rows[0].user_id)
     }
-    response.ok = true
-    res.status(statusCode).send(response)
+    res.send(successOrFail)
   })
   .catch((err) => {
-    var responseError = new Object()
-    responseError.ok = false
-    responseError.message = errors[err.code]
-    res.status(500).send(responseError) 
+    res.send(responses.fail(errors[err.code]))
   })
 })
 
-app.get('/ingredients', function (req, res, next) {
+app.get('/ingredients/query', function (req, res, next) {
   var id = req.query.id
-  console.log('id = ' + id)
   db.query(
     'SELECT * FROM ingredients WHERE id = $1',
     [id]
   )
   .then((result) => {
-    var response = Object()
-    response.date = Date.now().toString()
-    response.ok = true
-    response.ingredient = result.rows[0]
-    res.send(response)
+    res.send(responses.success(result.rows[0]))
   })
   .catch((err) => {
-    response.ok = false
-    response.error = err
-    res.send(response)
+    res.send(responses.fail(err))
   })
 })
 
-app.get('/plates', function (req, res, next) {
+app.get('/plates/query_all', function (req, res, next) {
   var userId = req.query.user_id
-  console.log('userId = ' + userId)
   db.query(
     'SELECT'
     + ' p.id AS plate_id,'
-    + ' p.user_id AS user_id,'
     + ' p.date AS date,'
+    + ' p.name AS name,'
     + ' pi.id AS plate_ingredients_id,'
     + ' pi.ingredient_id AS ingredient_id,'
     + ' pi.number_of_portions AS number_of_portions'
@@ -128,14 +90,45 @@ app.get('/plates', function (req, res, next) {
     [userId]
   )
   .then((result) => {
-    var response = Object()
-    response.ok = true
-    response.plates = result.rows
-    res.send(response)
+    res.send(responses.success(result.rows))
   })
   .catch((err) => {
-    response.ok = false
-    response.error = err
-    res.send(response)
+    res.send(responses.fail(err))
+  })
+})
+
+app.get('/plates/plate/insert', function (req, res, next) {
+  var user_id = req.body['user_id']
+  var name = req.body['name']
+  var date = req.body['date']
+
+  db.query(
+    'INSERT INTO plates(user_id, name, date) values ($1, $2, $3)',
+    [userId, name, date]
+  )
+  .then((result) => {
+    res.send(responses.success(result.rows))
+  })
+  .catch((err) => {
+    res.send(responses.fail(err))
+  })
+})
+
+app.post('/plates/ingredient/insert', function (req, res, next) {
+  var ingredient_id = req.body['ingredient_id']
+  var plate_id = req.body['plate_id']
+  var number_of_portions = req.body['number_of_portions']
+
+  db.query(
+    'INSERT INTO ' +
+    'plate_ingredients(ingredient_id, plate_id, number_of_portions) ' +
+    'values ($1, $2, $3) RETURNING id',
+    [ingredient_id, plate_id, number_of_portions]
+  )
+  .then((result) => {
+    res.send(responses.success(result.rows[0]))
+  })
+  .catch((err) => {
+    res.send(responses.fail(err))
   })
 })

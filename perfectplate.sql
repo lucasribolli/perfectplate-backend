@@ -31,6 +31,7 @@ CREATE TABLE INGREDIENTS (
 CREATE TABLE PLATES (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER NOT NULL,
+	name VARCHAR(500) NOT NULL,
 	date DATE NOT NULL,
 	CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES USERS(user_id)
 );
@@ -75,19 +76,23 @@ VALUES(
 
 INSERT INTO PLATES (
 	user_id,
+	name,
 	date
 )
 VALUES(
 	1,
+	'Marmita',
 	'2021-12-12 00:00:00'
 );
 
 INSERT INTO PLATES (
 	user_id,
+	name,
 	date
 )
 VALUES(
 	1,
+	'Almoço na sogra',
 	'2021-12-24'
 );
 
@@ -98,15 +103,26 @@ INSERT INTO PLATE_INGREDIENTS (
 )
 VALUES(
 	1,
-	4,
+	3,
 	50
+);
+
+INSERT INTO PLATE_INGREDIENTS (
+	ingredient_id,
+	plate_id,
+	number_of_portions
+)
+VALUES(
+	1,
+	4,
+	100
 );
 
 -- select all plates from a specific user id
 SELECT 
 p.id AS plate_id, 
-p.user_id AS user_id, 
 p.date AS date,
+p.name AS name,
 pi.id AS plate_ingredients_id, 
 pi.ingredient_id AS ingredient_id, 
 pi.number_of_portions AS number_of_portions
