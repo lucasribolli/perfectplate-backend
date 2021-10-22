@@ -2,10 +2,11 @@ DROP TABLE PLATE_INGREDIENTS;
 DROP TABLE PLATES;
 DROP TABLE INGREDIENTS;
 DROP TABLE USERS;
+DROP TYPE foodPyramid;
 
 CREATE TABLE USERS(
 	user_id serial PRIMARY KEY,
-	username VARCHAR(100) UNIQUE NOT NULL,
+	username VARCHAR(100) NOT NULL,
 	password VARCHAR(50) NOT NULL,
 	email VARCHAR(255) UNIQUE NOT NULL 
 );
@@ -30,6 +31,7 @@ CREATE TABLE INGREDIENTS (
 CREATE TABLE PLATES (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER NOT NULL,
+	date DATE NOT NULL,
 	CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES USERS(user_id)
 );
 
@@ -72,10 +74,21 @@ VALUES(
 );
 
 INSERT INTO PLATES (
-	user_id
+	user_id,
+	date
 )
 VALUES(
-	1
+	1,
+	'2021-12-12 00:00:00'
+);
+
+INSERT INTO PLATES (
+	user_id,
+	date
+)
+VALUES(
+	1,
+	'2021-12-24'
 );
 
 INSERT INTO PLATE_INGREDIENTS (
@@ -85,6 +98,35 @@ INSERT INTO PLATE_INGREDIENTS (
 )
 VALUES(
 	1,
-	1,
-	5
+	4,
+	50
 );
+
+-- select all plates from a specific user id
+SELECT 
+p.id AS plate_id, 
+p.user_id AS user_id, 
+p.date AS date,
+pi.id AS plate_ingredients_id, 
+pi.ingredient_id AS ingredient_id, 
+pi.number_of_portions AS number_of_portions
+FROM plates AS p
+INNER JOIN plate_ingredients AS pi
+ON p.id = pi.plate_id
+AND p.user_id = 1;
+
+-- select all plates from a specific user id and a specific date
+SELECT 
+p.id AS plate_id, 
+p.user_id AS user_id, 
+pi.id AS plate_ingredients_id, 
+pi.ingredient_id AS ingredient_id, 
+pi.number_of_portions AS number_of_portions
+FROM plates AS p
+INNER JOIN plate_ingredients AS pi
+ON p.id = pi.plate_id
+AND p.user_id = 1
+AND p.date = '2021-12-24';
+
+DELETE FROM PLATE_INGREDIENTS WHERE ID > 0;
+DELETE FROM PLATES WHERE ID > 0;

@@ -42,14 +42,14 @@ app.post('/users/signup', function (req, res, next) {
   ).then((result) => {
     var successResponse = new Object()
     successResponse.message = "USER_INSERTED"
-    successResponse.date = Date.now().toString()
     successResponse.user_id = result.rows[0].user_id
+    successResponse.ok = true
     res.status(200).send(successResponse) 
   })
   .catch((err) => {
     var responseError = new Object()
     responseError.message = errors[err.code].message
-    responseError.date = Date.now().toString()
+    responseError.ok = false
     res.status(errors[err.code].statusCode).send(responseError) 
   })
 })
@@ -78,13 +78,64 @@ app.post('/users/login', function (req, res, next) {
       response.user_id = result.rows[0].user_id
       response.message = "AUTHORIZED"
     }
-    response.date = Date.now().toString()
+    response.ok = true
     res.status(statusCode).send(response)
   })
   .catch((err) => {
     var responseError = new Object()
+    responseError.ok = false
     responseError.message = errors[err.code]
-    responseError.date = Date.now().toString()
     res.status(500).send(responseError) 
+  })
+})
+
+app.get('/ingredients', function (req, res, next) {
+  var id = req.query.id
+  console.log('id = ' + id)
+  db.query(
+    'SELECT * FROM ingredients WHERE id = $1',
+    [id]
+  )
+  .then((result) => {
+    var response = Object()
+    response.date = Date.now().toString()
+    response.ok = true
+    response.ingredient = result.rows[0]
+    res.send(response)
+  })
+  .catch((err) => {
+    response.ok = false
+    response.error = err
+    res.send(response)
+  })
+})
+
+app.get('/plates', function (req, res, next) {
+  var userId = req.query.user_id
+  console.log('userId = ' + userId)
+  db.query(
+    'SELECT'
+    + ' p.id AS plate_id,'
+    + ' p.user_id AS user_id,'
+    + ' p.date AS date,'
+    + ' pi.id AS plate_ingredients_id,'
+    + ' pi.ingredient_id AS ingredient_id,'
+    + ' pi.number_of_portions AS number_of_portions'
+    + ' FROM plates AS p'
+    + ' INNER JOIN plate_ingredients AS pi'
+    + ' ON p.id = pi.plate_id'
+    + ' AND p.user_id = $1',
+    [userId]
+  )
+  .then((result) => {
+    var response = Object()
+    response.ok = true
+    response.plates = result.rows
+    res.send(response)
+  })
+  .catch((err) => {
+    response.ok = false
+    response.error = err
+    res.send(response)
   })
 })
