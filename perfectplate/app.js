@@ -103,11 +103,11 @@ app.post('/plates/plate/insert', function (req, res, next) {
   var date = req.body['date']
 
   db.query(
-    'INSERT INTO plates(user_id, name, date) values ($1, $2, $3)',
+    'INSERT INTO plates(user_id, name, date) values ($1, $2, $3) RETURNING id',
     [userId, name, date]
   )
   .then((result) => {
-    res.send(responses.success(result.rows))
+    res.send(responses.success(result.rows[0]))
   })
   .catch((err) => {
     res.send(responses.fail(err))
