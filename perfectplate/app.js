@@ -107,7 +107,7 @@ app.post('/plates/plate/insert', function (req, res, next) {
     [userId, name, date]
   )
   .then((result) => {
-    res.send(responses.success(result.rows[0]))
+    res.send(responses.success(result.rows[0].id))
   })
   .catch((err) => {
     res.send(responses.fail(err))
@@ -126,7 +126,7 @@ app.post('/plates/ingredient/insert', function (req, res, next) {
     [ingredient_id, plate_id, number_of_portions]
   )
   .then((result) => {
-    res.send(responses.success(result.rows[0]))
+    res.send(responses.success(result.rows[0].id))
   })
   .catch((err) => {
     res.send(responses.fail(err))
