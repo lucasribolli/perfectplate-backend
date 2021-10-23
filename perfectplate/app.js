@@ -97,7 +97,7 @@ app.get('/plates/query_all', function (req, res, next) {
   })
 })
 
-app.get('/plates/plate/insert', function (req, res, next) {
+app.post('/plates/plate/insert', function (req, res, next) {
   var user_id = req.body['user_id']
   var name = req.body['name']
   var date = req.body['date']
