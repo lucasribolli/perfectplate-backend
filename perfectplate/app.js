@@ -59,6 +59,16 @@ app.post('/users/login', function (req, res, next) {
   })
 })
 
+app.get('/ingredients/query_all', function (req, res, next) {
+  db.query('SELECT * FROM ingredients')
+  .then((result) => {
+    res.send(responses.success(result.rows))
+  })
+  .catch((err) => {
+    res.send(responses.fail(err))
+  })
+})
+
 app.get('/ingredients/query', function (req, res, next) {
   var id = req.query.id
   db.query(
