@@ -22,16 +22,23 @@ app.get('/users/query_all', function (req, res, next) {
 })
 
 app.post('/users/signup', function (req, res, next) {
-  var username = req.body['username']
   var email = req.body['email']
   var password = req.body['password']
+  var name = req.body['name']
+  var age = req.body['age']
+  var sex = req.body['sex']
+  var weight = req.body['weight']
+  var height = req.body['height']
+  var userType = req.body['userType']
 
   db.query(
-    "INSERT INTO USERS (username, password, email) VALUES($1, $2, $3) RETURNING user_id", 
-    [username, password, email]
+    "INSERT INTO USERS " +
+    "(email, password, name, age, sex, weight, height, userType) " + 
+    "VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id", 
+    [email, password, name, age, sex, weight, height, userType]
   )
   .then((result) => {
-    res.send(responses.success(result.rows[0].user_id)) 
+    res.send(responses.success(result.rows[0].id)) 
   })
   .catch((err) => {
     res.send(responses.fail(errors[err.code]))
@@ -50,7 +57,7 @@ app.post('/users/login', function (req, res, next) {
     if(result.rowCount == 0) {
       successOrFail = responses.fail("USER_UNFOUND")
     } else {
-      successOrFail = responses.success(result.rows[0].user_id)
+      successOrFail = responses.success(result.rows[0].id)
     }
     res.send(successOrFail)
   })
