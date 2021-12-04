@@ -90,28 +90,47 @@ app.get('/ingredients/query', function (req, res, next) {
   })
 })
 
-app.get('/plates/query_all', function (req, res, next) {
-  var userId = req.query.user_id
-  db.query(
-    'SELECT'
-    + ' p.id AS plate_id,'
-    + ' p.date AS date,'
-    + ' p.name AS name,'
-    + ' pi.id AS plate_ingredients_id,'
-    + ' pi.ingredient_id AS ingredient_id,'
-    + ' pi.number_of_portions AS number_of_portions'
-    + ' FROM plates AS p'
-    + ' INNER JOIN plate_ingredients AS pi'
-    + ' ON p.id = pi.plate_id'
-    + ' AND p.user_id = $1',
-    [userId]
-  )
-  .then((result) => {
-    res.send(responses.success(result.rows))
-  })
-  .catch((err) => {
+app.get('/plates/query_all', async function (req, res, _) {
+  try {
+    var userId = req.query.user_id
+    var plateResult = await db.query(
+      'SELECT'
+      + ' id,'
+      + ' date,'
+      + ' name'
+      + ' FROM plates'
+      + ' WHERE user_id = $1',
+      [userId]
+    )
+    var plates = Array();
+    for(var i=0; i < plateResult.rowCount; i++) {
+      var plate = plateResult.rows[i]
+      var ingredientsResult = await db.query(
+        'SELECT'
+        + ' i.id as ingredient_id,' 
+        + ' i.name,'
+        + ' i.one_portion_weight,'
+        + ' i.classification,'
+        + ' i.energetic_value,'
+        + ' i.carbohydrate,'
+        + ' i.protein,'
+        + ' i.saturated_fat,'
+        + ' i.total_fat,'
+        + ' i.trans_fat,'
+        + ' i.fibre,'
+        + ' i.sodium,'
+        + ' p.number_of_portions'
+        + ' FROM plate_ingredients AS p, ingredients as i'
+        + ' WHERE p.plate_id = $1 AND i.id = p.ingredient_id',
+        [plate.id]
+      )
+      plate.ingredients = ingredientsResult.rows;
+      plates.push(plate)
+    }
+    res.send(responses.success(plates))
+  } catch (e) {
     res.send(responses.fail(err))
-  })
+  }
 })
 
 app.post('/plates/plate/insert', function (req, res, next) {

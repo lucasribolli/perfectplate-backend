@@ -79,6 +79,34 @@ VALUES(
 	0.025
 );
 
+INSERT INTO 
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+) 
+VALUES(
+	'Feijão',
+	300,
+	'carbohydrate',
+	135,
+	2.0, 
+	0.05,
+	0.65,
+	0.02,
+	0.5,
+	0.4,
+	0.025
+);
+
 INSERT INTO PLATES (
 	user_id,
 	name,
@@ -108,8 +136,8 @@ INSERT INTO PLATE_INGREDIENTS (
 )
 VALUES(
 	1,
-	3,
-	50
+	13,
+	1
 );
 
 INSERT INTO PLATE_INGREDIENTS (
@@ -118,36 +146,33 @@ INSERT INTO PLATE_INGREDIENTS (
 	number_of_portions
 )
 VALUES(
-	1,
-	4,
-	100
+	2,
+	13,
+	2
 );
 
--- select all plates from a specific user id
+-- select all ingredients for each plate from a specific user id.
+-- This requires two queries. Maybe can be improved
 SELECT 
-p.id AS plate_id, 
-p.date AS date,
-p.name AS name,
-pi.id AS plate_ingredients_id, 
-pi.ingredient_id AS ingredient_id, 
-pi.number_of_portions AS number_of_portions
-FROM plates AS p
-INNER JOIN plate_ingredients AS pi
-ON p.id = pi.plate_id
-AND p.user_id = 1;
+id AS plate_id, 
+date AS date,
+name AS name
+FROM plates
+WHERE user_id = 1;
 
--- select all plates from a specific user id and a specific date
-SELECT 
-p.id AS plate_id, 
-p.user_id AS user_id, 
-pi.id AS plate_ingredients_id, 
-pi.ingredient_id AS ingredient_id, 
-pi.number_of_portions AS number_of_portions
-FROM plates AS p
-INNER JOIN plate_ingredients AS pi
-ON p.id = pi.plate_id
-AND p.user_id = 1
-AND p.date = '2021-12-24';
-
-DELETE FROM PLATE_INGREDIENTS WHERE ID > 0;
-DELETE FROM PLATES WHERE ID > 0;
+SELECT
+i.id as ingredient_id, 
+i.name,
+i.one_portion_weight,
+i.classification,
+i.energetic_value,
+i.carbohydrate,
+i.protein,
+i.saturated_fat,
+i.total_fat,
+i.trans_fat,
+i.fibre,
+i.sodium,
+p.number_of_portions
+FROM plate_ingredients AS p, ingredients as i
+WHERE p.plate_id = 13 AND i.id = p.ingredient_id
