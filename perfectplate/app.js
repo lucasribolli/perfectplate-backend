@@ -33,12 +33,12 @@ app.post('/users/signup', function (req, res, next) {
 
   db.query(
     "INSERT INTO USERS " +
-    "(email, password, name, age, sex, weight, height, userType) " + 
-    "VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id", 
+    "(email, password, name, age, sex, weight, height, userType) " +
+    "VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id",
     [email, password, name, age, sex, weight, height, userType]
   )
   .then((result) => {
-    res.send(responses.success(result.rows[0].id)) 
+    res.send(responses.success(result.rows[0].id))
   })
   .catch((err) => {
     res.send(responses.fail(errors[err.code]))
@@ -57,7 +57,7 @@ app.post('/users/login', function (req, res, next) {
     if(result.rowCount == 0) {
       successOrFail = responses.fail("USER_UNFOUND")
     } else {
-      successOrFail = responses.success(result.rows[0].id)
+      successOrFail = responses.success({id: result.rows[0].id, userType: result.rows[0].userType})
     }
     res.send(successOrFail)
   })
@@ -107,7 +107,7 @@ app.get('/plates/query_all', async function (req, res, _) {
       var plate = plateResult.rows[i]
       var ingredientsResult = await db.query(
         'SELECT'
-        + ' i.id as ingredient_id,' 
+        + ' i.id as ingredient_id,'
         + ' i.name,'
         + ' i.one_portion_weight,'
         + ' i.classification,'
