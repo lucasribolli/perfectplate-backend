@@ -172,16 +172,30 @@ app.post('/plates/ingredient/insert', function (req, res, next) {
   })
 })
 
-app.get('/plate', function (req, res, next) {
-  var plate_id = req.query.plate_id
-  db.query(
-      'SELECT * FROM plate_ingredients WHERE plate_id = $1',
-      [plate_id]
-  )
-      .then((result) => {
-        res.send(responses.success(result.rows))
-      })
-      .catch((err) => {
-        res.send(responses.fail(err))
-      })
+app.get('/plate', async function (req, res, _) {
+  try {
+    var plateId = req.query.plate_id
+    var ingredientsResult = await db.query(
+        'SELECT'
+        + ' i.id as ingredient_id,'
+        + ' i.name,'
+        + ' i.one_portion_weight,'
+        + ' i.classification,'
+        + ' i.energetic_value,'
+        + ' i.carbohydrate,'
+        + ' i.protein,'
+        + ' i.saturated_fat,'
+        + ' i.total_fat,'
+        + ' i.trans_fat,'
+        + ' i.fibre,'
+        + ' i.sodium,'
+        + ' p.number_of_portions'
+        + ' FROM plate_ingredients AS p, ingredients as i'
+        + ' WHERE p.plate_id = $1 AND i.id = p.ingredient_id',
+        [plateId]
+    )
+    res.send(responses.success(ingredientsResult))
+  } catch (e) {
+    res.send(responses.fail(err))
+  }
 })
