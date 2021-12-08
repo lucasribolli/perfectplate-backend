@@ -58,7 +58,7 @@ app.post('/users/login', function (req, res, next) {
       successOrFail = responses.fail("USER_UNFOUND")
     } else {
       successOrFail = responses.success({
-        id: result.rows[0].id, 
+        id: result.rows[0].id,
         userType: result.rows[0].usertype
       })
     }
@@ -170,4 +170,18 @@ app.post('/plates/ingredient/insert', function (req, res, next) {
   .catch((err) => {
     res.send(responses.fail(err))
   })
+})
+
+app.get('/plate', function (req, res, next) {
+  var plate_id = req.query.plate_id
+  db.query(
+      'SELECT * FROM plate_ingredients WHERE plate_id = $1',
+      [plate_id]
+  )
+      .then((result) => {
+        res.send(responses.success(result.rows))
+      })
+      .catch((err) => {
+        res.send(responses.fail(err))
+      })
 })
