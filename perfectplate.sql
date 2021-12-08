@@ -13,8 +13,10 @@ CREATE TABLE USERS(
 	sex VARCHAR(50) NOT NULL,
 	weight VARCHAR(10) NOT NULL,
 	height VARCHAR(10) NOT NULL, 
-	userType VARCHAR(100) NOT NULL
+	userType userType NOT NULL
 );
+
+CREATE TYPE userType AS ENUM ('FISICULTURISTA', 'NUTRICIONISTA', 'PADRAO', 'ADMIN')
 
 CREATE TYPE foodPyramid AS ENUM ('carbohydrate', 'vegetable', 'protein');
 

@@ -57,7 +57,10 @@ app.post('/users/login', function (req, res, next) {
     if(result.rowCount == 0) {
       successOrFail = responses.fail("USER_UNFOUND")
     } else {
-      successOrFail = responses.success({id: result.rows[0].id, userType: result.rows[0].usertype})
+      successOrFail = responses.success({
+        id: result.rows[0].id, 
+        userType: result.rows[0].usertype
+      })
     }
     res.send(successOrFail)
   })
