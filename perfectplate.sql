@@ -6,14 +6,19 @@ DROP TYPE foodPyramid;
 
 CREATE TABLE USERS(
 	id serial PRIMARY KEY,
-	email VARCHAR(255) UNIQUE NOT NULL ,
+	email VARCHAR(255) UNIQUE NOT NULL,
 	password VARCHAR(255) NOT NULL,
 	name VARCHAR(100) NOT NULL,
 	age VARCHAR(3) NOT NULL,
 	sex VARCHAR(50) NOT NULL,
 	weight VARCHAR(10) NOT NULL,
-	height VARCHAR(10) NOT NULL, 
+	height VARCHAR(10) NOT NULL,
 	userType userType NOT NULL
+);
+
+CREATE TABLE INGREDIENTS_SUGGESTION(
+	id serial PRIMARY KEY,
+	name VARCHAR(255) UNIQUE NOT NULL,
 );
 
 CREATE TYPE userType AS ENUM ('FISICULTURISTA', 'NUTRICIONISTA', 'PADRAO', 'ADMIN')
@@ -53,7 +58,7 @@ CREATE TABLE PLATE_INGREDIENTS (
 );
 
 
-INSERT INTO 
+INSERT INTO
 INGREDIENTS(
 	name,
 	one_portion_weight,
@@ -66,13 +71,13 @@ INGREDIENTS(
 	trans_fat,
 	fibre,
 	sodium
-) 
+)
 VALUES(
 	'Arroz',
 	200,
 	'carbohydrate',
 	130,
-	2.5, 
+	2.5,
 	0.01,
 	0.63,
 	0.05,
@@ -81,7 +86,7 @@ VALUES(
 	0.025
 );
 
-INSERT INTO 
+INSERT INTO
 INGREDIENTS(
 	name,
 	one_portion_weight,
@@ -94,13 +99,13 @@ INGREDIENTS(
 	trans_fat,
 	fibre,
 	sodium
-) 
+)
 VALUES(
 	'Feijão',
 	300,
 	'carbohydrate',
 	135,
-	2.0, 
+	2.0,
 	0.05,
 	0.65,
 	0.02,
@@ -155,15 +160,15 @@ VALUES(
 
 -- select all ingredients for each plate from a specific user id.
 -- This requires two queries. Maybe can be improved
-SELECT 
-id AS plate_id, 
+SELECT
+id AS plate_id,
 date AS date,
 name AS name
 FROM plates
 WHERE user_id = 1;
 
 SELECT
-i.id as ingredient_id, 
+i.id as ingredient_id,
 i.name,
 i.one_portion_weight,
 i.classification,

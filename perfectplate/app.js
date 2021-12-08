@@ -127,6 +127,60 @@ app.get('/ingredients/query', function (req, res, next) {
   })
 })
 
+app.post('/ingredient/create', function (req, res, next) {
+    var name = req.body['name']
+    var one_portion_weight = req.body['one_portion_weight']
+    var classification = req.body['classification']
+    var energetic_value = req.body['energetic_value']
+    var carbohydrate = req.body['carbohydrate']
+    var protein = req.body['protein']
+    var saturated_fat = req.body['saturated_fat']
+    var total_fat = req.body['total_fat']
+    var trans_fat = req.body['trans_fat']
+    var fibre = req.body['fibre']
+    var sodium = req.body['sodium']
+
+  db.query(
+      "INSERT INTO INGREDIENTS " +
+      "(name, one_portion_weight, classification, energetic_value, carbohydrate, protein, saturated_fat, total_fat, trans_fat, fibre, sodium) " +
+      "VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id",
+      [name, one_portion_weight, classification, energetic_value, carbohydrate, protein, saturated_fat, total_fat, trans_fat, fibre, sodium]
+  )
+      .then((result) => {
+        res.send(responses.success(result.rows[0].id))
+      })
+      .catch((err) => {
+        res.send(responses.fail(errors[err.code]))
+      })
+})
+
+app.post('/ingredient/suggestion', function (req, res, next) {
+  var ingredient_name = req.body['ingredient_name']
+
+  db.query(
+      "INSERT INTO INGREDIENTS_SUGGESTION " +
+      "(name) " +
+      "VALUES($1) RETURNING id",
+      [ingredient_name]
+  )
+      .then((result) => {
+        res.send(responses.success(result.rows[0].id))
+      })
+      .catch((err) => {
+        res.send(responses.fail(errors[err.code]))
+      })
+})
+
+app.get('/ingredient/suggestion-list', function (req, res, next) {
+  db.query("SELECT * FROM INGREDIENTS_SUGGESTION")
+      .then((result) => {
+        res.send(responses.success(result.rows))
+      })
+      .catch((err) => {
+        res.send(responses.fail(errors[err.code]))
+      })
+})
+
 app.get('/plates/query_all', async function (req, res, _) {
   try {
     var userId = req.query.user_id
