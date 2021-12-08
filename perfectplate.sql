@@ -16,6 +16,28 @@ CREATE TABLE USERS(
 	userType userType NOT NULL
 );
 
+INSERT INTO
+USERS(
+	email,
+    password,
+    name,
+    age,
+    sex,
+    weight,
+    height,
+    userType
+)
+VALUES(
+	'admin@admin.com',
+	'admin123',
+	'admin',
+	'19',
+	'Masculino',
+	'70',
+	'180',
+	'ADMIN',
+);
+
 CREATE TABLE INGREDIENTS_SUGGESTION(
 	id serial PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
@@ -76,6 +98,62 @@ VALUES(
 	'Arroz',
 	200,
 	'carbohydrate',
+	130,
+	2.5,
+	0.01,
+	0.63,
+	0.05,
+	0,
+	0.4,
+	0.025
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Cenoura',
+	200,
+	'vegetable',
+	130,
+	2.5,
+	0.01,
+	0.63,
+	0.05,
+	0,
+	0.4,
+	0.025
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Filé de frango',
+	200,
+	'protein',
 	130,
 	2.5,
 	0.01,
