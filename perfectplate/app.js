@@ -32,7 +32,7 @@ app.get('/user', function (req, res, next) {
 })
 
 app.put('/user', function (req, res, next) {
-  var userId = req.query.user_id
+  var userId = req.body['userId']
   var email = req.body['email']
   var password = req.body['password']
   var name = req.body['name']
@@ -53,14 +53,6 @@ app.put('/user', function (req, res, next) {
       .catch((err) => {
         res.send(responses.fail(errors[err.code]))
       })
-  db.query(
-      'UPDATE Customers' +
-      'SET ContactName = $1, City= \'Frankfurt\'\n' +
-      'WHERE CustomerID = 1;',
-      [userId]
-  )
-      .then((result) => res.send(responses.success(result.rows[0])))
-      .catch((err) => res.send(responses.fail('fail')))
 })
 
 app.post('/users/signup', function (req, res, next) {
