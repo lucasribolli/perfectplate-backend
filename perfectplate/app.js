@@ -31,7 +31,7 @@ app.get('/user', function (req, res, next) {
       .catch((err) => res.send(responses.fail('fail')))
 })
 
-app.put('/user', function (req, res, next) {
+app.put('/user/edit', function (req, res, next) {
   var userId = req.body['userId']
   var email = req.body['email']
   var password = req.body['password']
@@ -44,7 +44,7 @@ app.put('/user', function (req, res, next) {
   db.query(
       "UPDATE USERS " +
       "SET email = $1, password = $2, name = $3, age = $4, sex = $5, weight = $6, height = $7, userType = $8 " +
-      "WHERE id = $9",
+      "WHERE id = $9 RETURNING id",
       [email, password, name, age, sex, weight, height, userType, userId]
   )
       .then((result) => {
