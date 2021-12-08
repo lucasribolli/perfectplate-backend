@@ -21,6 +21,16 @@ app.get('/users/query_all', function (req, res, next) {
   .catch((err) => res.send(responses.fail('fail')))
 })
 
+app.get('/user', function (req, res, next) {
+  var userId = req.query.user_id
+  db.query(
+      'SELECT * FROM USERS WHERE id = $1',
+      [userId]
+  )
+      .then((result) => res.send(responses.success(result.rows[0])))
+      .catch((err) => res.send(responses.fail('fail')))
+})
+
 app.post('/users/signup', function (req, res, next) {
   var email = req.body['email']
   var password = req.body['password']
