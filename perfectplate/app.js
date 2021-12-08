@@ -194,7 +194,7 @@ app.get('/plate', async function (req, res, _) {
         + ' WHERE p.plate_id = $1 AND i.id = p.ingredient_id',
         [plateId]
     )
-    res.send(responses.success(ingredientsResult))
+    res.send(responses.success(ingredientsResult.rows))
   } catch (e) {
     res.send(responses.fail(err))
   }
