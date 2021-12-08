@@ -260,6 +260,26 @@ app.post('/plates/ingredient/insert', function (req, res, next) {
   })
 })
 
+app.delete('/plate/delete', async function (req, res, next) {
+  try {
+    var plate_id = req.query.plate_id
+    await db.query(
+        'DELETE FROM PLATE_INGREDIENTS ' +
+        'WHERE plate_id = $1',
+        [plate_id]
+    )
+    await db.query(
+        'DELETE FROM PLATES ' +
+        'WHERE id = $1',
+        [plate_id]
+    )
+    res.send(responses.success({message: "DELETED_SUCCESSFULLY"}))
+  }
+  catch {
+    res.send(responses.fail(err))
+  }
+})
+
 app.get('/plate', async function (req, res, _) {
   try {
     var plateId = req.query.plate_id
