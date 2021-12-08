@@ -31,6 +31,38 @@ app.get('/user', function (req, res, next) {
       .catch((err) => res.send(responses.fail('fail')))
 })
 
+app.put('/user', function (req, res, next) {
+  var userId = req.query.user_id
+  var email = req.body['email']
+  var password = req.body['password']
+  var name = req.body['name']
+  var age = req.body['age']
+  var sex = req.body['sex']
+  var weight = req.body['weight']
+  var height = req.body['height']
+  var userType = req.body['userType']
+  db.query(
+      "UPDATE USERS " +
+      "SET email = $1, password = $2, name = $3, age = $4, sex = $5, weight = $6, height = $7, userType = $8 " +
+      "WHERE id = $9",
+      [email, password, name, age, sex, weight, height, userType, userId]
+  )
+      .then((result) => {
+        res.send(responses.success(result.rows[0]))
+      })
+      .catch((err) => {
+        res.send(responses.fail(errors[err.code]))
+      })
+  db.query(
+      'UPDATE Customers' +
+      'SET ContactName = $1, City= \'Frankfurt\'\n' +
+      'WHERE CustomerID = 1;',
+      [userId]
+  )
+      .then((result) => res.send(responses.success(result.rows[0])))
+      .catch((err) => res.send(responses.fail('fail')))
+})
+
 app.post('/users/signup', function (req, res, next) {
   var email = req.body['email']
   var password = req.body['password']
