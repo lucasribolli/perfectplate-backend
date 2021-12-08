@@ -181,6 +181,21 @@ app.get('/ingredient/suggestion-list', function (req, res, next) {
       })
 })
 
+app.delete('/ingredient/suggestion/delete', async function (req, res, next) {
+  try {
+    var ingredientId = req.query.ingredient_id
+    await db.query(
+      'DELETE FROM INGREDIENTS_SUGGESTION ' +
+      'WHERE id = $1',
+      [ingredientId]
+    )
+    res.send(responses.success({message: "DELETED_SUCCESSFULLY"}))
+  }
+  catch (err) {
+    res.send(responses.fail(err))
+  }
+})
+
 app.get('/plates/query_all', async function (req, res, _) {
   try {
     var userId = req.query.user_id
@@ -219,7 +234,7 @@ app.get('/plates/query_all', async function (req, res, _) {
       plates.push(plate)
     }
     res.send(responses.success(plates))
-  } catch (e) {
+  } catch (err) {
     res.send(responses.fail(err))
   }
 })
@@ -275,7 +290,7 @@ app.delete('/plate/delete', async function (req, res, next) {
     )
     res.send(responses.success({message: "DELETED_SUCCESSFULLY"}))
   }
-  catch {
+  catch (err) {
     res.send(responses.fail(err))
   }
 })
@@ -303,7 +318,7 @@ app.get('/plate', async function (req, res, _) {
         [plateId]
     )
     res.send(responses.success(ingredientsResult.rows))
-  } catch (e) {
+  } catch (err) {
     res.send(responses.fail(err))
   }
 })
