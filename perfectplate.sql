@@ -96,16 +96,16 @@ INGREDIENTS(
 )
 VALUES(
 	'Arroz',
-	200,
+	50,
 	'carbohydrate',
-	130,
-	2.5,
-	0.01,
-	0.63,
-	0.05,
+	185,
+	41,
+	3.4,
 	0,
-	0.4,
-	0.025
+	0,
+	0,
+	1.4,
+	0
 );
 
 INSERT INTO
@@ -123,17 +123,101 @@ INGREDIENTS(
 	sodium
 )
 VALUES(
-	'Cenoura',
-	200,
-	'vegetable',
+	'Milho verde',
 	130,
-	2.5,
-	0.01,
-	0.63,
-	0.05,
+	'carbohydrate',
+	179,
+	37,
+	8.6,
+	0.8,
 	0,
-	0.4,
-	0.025
+	0,
+	5.1,
+	447
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Batata',
+	50,
+	'carbohydrate',
+	123,
+	17,
+	0,
+	5.8,
+	0.6,
+	0,
+	0.8,
+	76
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Quinoa',
+	50,
+	'carbohydrate',
+	184,
+	36.7,
+	6.7,
+	2.7,
+	0,
+	0,
+	3,
+	10.6
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Mandioca',
+	40,
+	'carbohydrate',
+	72,
+	11,
+	3.1,
+	1.8,
+	0.9,
+	0,
+	0,
+	149
 );
 
 INSERT INTO
@@ -152,16 +236,16 @@ INGREDIENTS(
 )
 VALUES(
 	'Filé de frango',
-	200,
+	124,
 	'protein',
-	130,
-	2.5,
-	0.01,
-	0.63,
-	0.05,
+	157,
 	0,
-	0.4,
-	0.025
+	36,
+	1.5,
+	0,
+	0,
+	0,
+	86
 );
 
 INSERT INTO
@@ -179,17 +263,241 @@ INGREDIENTS(
 	sodium
 )
 VALUES(
-	'Feijão',
-	300,
-	'carbohydrate',
-	135,
-	2.0,
-	0.05,
-	0.65,
-	0.02,
-	0.5,
+	'Linguiça',
+	50,
+	'protein',
+	160,
+	0.8,
+	8.8,
+	14,
+	4.5,
+	0,
+	0,
+	725
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Filé mingnon',
+	90,
+	'protein',
+	133,
+	0,
+	22,
+	5,
+	1.7,
+	0,
+	0,
+	67
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Filé de salmão',
+	100,
+	'protein',
+	228,
+	0,
+	24,
+	2,
+	0,
+	0,
+	0,
+	85
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Bisteca',
+	110,
+	'protein',
+	197,
+	0,
+	20,
+	13,
+	4.5,
+	0.3,
+	0,
+	155
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Alface',
+	65,
+	'vegetable',
+	52,
+	7.7,
+	0,
+	2.5,
+	2.2,
+	0,
+	1,
+	5.9
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Acelga',
+	100,
+	'vegetable',
+	21,
+	2.7,
+	2.1,
+	0.2,
+	0,
+	0,
+	2.7,
+	1.2
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Couve',
+	100,
+	'vegetable',
+	26,
+	4.5,
+	2,
+	0,
+	0,
+	0,
+	2,
+	3.4
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Espinafre',
+	100,
+	'vegetable',
+	151,
+	32,
+	3.5,
+	1.1,
+	0,
+	0,
+	2.7,
+	208
+);
+
+INSERT INTO
+INGREDIENTS(
+	name,
+	one_portion_weight,
+	classification,
+	energetic_value,
+	carbohydrate,
+	protein,
+	saturated_fat,
+	total_fat,
+	trans_fat,
+	fibre,
+	sodium
+)
+VALUES(
+	'Brócolis',
+	50,
+	'vegetable',
+	13,
+	2,
+	2.2,
+	0,
+	0,
+	0,
 	0.4,
-	0.025
+	3.3
 );
 
 INSERT INTO PLATES (
